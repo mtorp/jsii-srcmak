@@ -43,7 +43,10 @@ export async function compile(workdir: string, options: Options) {
 
     const targetdir = path.join(path.join(workdir, 'node_modules'), moduleName);
     await fs.mkdirp(path.dirname(targetdir));
-    await fs.copy(dir, targetdir);
+    await /* TODO: JSFIX could not patch the breaking change:
+    Allow copying broken symlinks 
+    Suggested fix: You can use the exists and existsSync functions https://nodejs.org/api/fs.html#fsexistspath-callback from the fs module to check if a symlink is broken. */
+    fs.copy(dir, targetdir);
 
     // add to "deps" and "peer deps"
     if (!moduleName.startsWith('@types/')) {
