@@ -17,14 +17,20 @@ export async function srcmak(srcdir: string, options: Options = { }) {
 
   await mkdtemp(async workdir => {
     // copy sources to temp directory
-    await fs.copy(srcdir, workdir);
+    await /* TODO: JSFIX could not patch the breaking change:
+    Allow copying broken symlinks 
+    Suggested fix: You can use the exists and existsSync functions https://nodejs.org/api/fs.html#fsexistspath-callback from the fs module to check if a symlink is broken. */
+    fs.copy(srcdir, workdir);
 
     // perform jsii compilation
     await compile(workdir, options);
 
     // extract .jsii if requested
     if (options.jsii) {
-      await fs.copy(path.join(workdir, '.jsii'), options.jsii.path);
+      await /* TODO: JSFIX could not patch the breaking change:
+      Allow copying broken symlinks 
+      Suggested fix: You can use the exists and existsSync functions https://nodejs.org/api/fs.html#fsexistspath-callback from the fs module to check if a symlink is broken. */
+      fs.copy(path.join(workdir, '.jsii'), options.jsii.path);
     }
 
     // run pacmak to generate code
